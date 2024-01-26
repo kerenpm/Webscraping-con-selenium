@@ -1,4 +1,5 @@
 from time import sleep
+import re
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -27,8 +28,18 @@ sleep(2)
 
 # Busca los títulos después de la carga completa de la página
 subtitulos = driver.find_elements(By.XPATH, '//div[@class="_i5duul"]')
+
+# Inicializa una lista para almacenar los precios
+lista_precios = []
+
+# Extrae los precios de cada subtítulo y los agrega a la lista
 for subtitulo in subtitulos:
-    print(subtitulo.text)
+    precio = re.search(r'(\d[\d.,]*)', subtitulo.text).group()
+    lista_precios.append(precio)
+
+# Imprime la lista de precios
+print(lista_precios)
 
 # Cierra el navegador al finalizar
 driver.quit()
+
