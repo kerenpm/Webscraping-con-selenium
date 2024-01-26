@@ -20,7 +20,7 @@ driver = webdriver.Chrome(
 driver.get('https://www.airbnb.com.pe/')
 
 # Espera hasta que la página esté completamente cargada (puedes ajustar el tiempo según sea necesario)
-sleep(10)
+sleep(60)
 
 # Intenta realizar una acción para forzar la carga completa de la página (puedes ajustar según sea necesario)
 driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
