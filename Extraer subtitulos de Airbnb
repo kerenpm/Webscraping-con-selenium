@@ -16,10 +16,10 @@ driver = webdriver.Chrome(
     options=opts
 )
 
-driver.get('https://www.airbnb.com.pe/')
+driver.get('https://www.airbnb.com.pe/s/M%C3%A1ncora--Piura--Per%C3%BA/homes?tab_id=home_tab&refinement_paths%5B%5D=%2Fhomes&flexible_trip_lengths%5B%5D=one_week&monthly_start_date=2024-02-01&monthly_length=3&price_filter_input_type=0&channel=EXPLORE&query=M%C3%A1ncora%2C%20Piura&place_id=ChIJy8uo3EuRNpARBZG3evjMMxY&date_picker_type=calendar&checkin=2024-02-02&checkout=2024-02-04&adults=3&source=structured_search_input_header&search_type=autocomplete_click')
 
 # Espera hasta que la página esté completamente cargada (puedes ajustar el tiempo según sea necesario)
-sleep(60)
+sleep(10)
 
 # Intenta realizar una acción para forzar la carga completa de la página (puedes ajustar según sea necesario)
 driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
@@ -37,6 +37,10 @@ for subtitulo in subtitulos:
 
 # Imprime la lista de subtítulos
 print(lista_subtitulos)
+
+# Cierra el navegador al finalizar
+driver.quit()
+
 
 # Cierra el navegador al finalizar
 driver.quit()
