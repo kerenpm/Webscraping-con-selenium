@@ -1,0 +1,64 @@
+from time import sleep
+import re
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+from webdriver_manager.chrome import ChromeDriverManager
+
+opts = Options()
+opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
+driver = webdriver.Chrome(
+    service=Service(ChromeDriverManager().install()),
+    options=opts
+)
+
+driver.get('https://www.airbnb.com.pe/')
+
+# Espera hasta que la página esté completamente cargada (puedes ajustar el tiempo según sea necesario)
+sleep(10)
+
+# Intenta realizar una acción para forzar la carga completa de la página (puedes ajustar según sea necesario)
+driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
+sleep(2)
+
+# Espera hasta que los elementos estén presentes en la página
+titulos_presentes = WebDriverWait(driver, 10).until(
+    EC.presence_of_all_elements_located((By.XPATH, '//div[@data-testid="listing-card-title"]'))
+)
+
+subtitulos_presentes = WebDriverWait(driver, 10).until(
+    EC.presence_of_all_elements_located((By.XPATH, '//div[@data-testid="listing-card-subtitle"]'))
+)
+
+precios_presentes = WebDriverWait(driver, 10).until(
+    EC.presence_of_all_elements_located((By.XPATH, '//div[@class="_i5duul"]'))
+)
+
+# Busca los títulos, subtítulos y precios después de que estén presentes en la página
+titulos = driver.find_elements(By.XPATH, '//div[@data-testid="listing-card-title"]')
+subtitulos = driver.find_elements(By.XPATH, '//div[@data-testid="listing-card-subtitle"]')
+precios = driver.find_elements(By.XPATH, '//div[@class="_i5duul"]')
+
+# Inicializa una lista para almacenar los datos de cada habitación
+lista_habitaciones = []
+
+# Itera sobre los elementos para construir la lista de tuplas
+for titulo, subtitulo, precio in zip(titulos, subtitulos, precios):
+    # Extrae el precio de cada habitación
+    precio_habitacion = re.search(r'(\d[\d.,]*)', precio.text).group()
+    # Agrega los datos de la habitación como una tupla a la lista
+    lista_habitaciones.append((titulo.text, subtitulo.text, precio_habitacion))
+
+# Imprime la lista de habitaciones
+for habitacion in lista_habitaciones:
+    print(habitacion)
+
+# Cierra el navegador al finalizar
+driver.quit()
