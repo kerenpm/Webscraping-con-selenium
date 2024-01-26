@@ -1,0 +1,34 @@
+from time import sleep
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
+
+from webdriver_manager.chrome import ChromeDriverManager
+
+opts = Options()
+opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
+driver = webdriver.Chrome(
+    service=Service(ChromeDriverManager().install()),
+    options=opts
+)
+
+driver.get('https://www.airbnb.com.pe/')
+
+# Espera hasta que la página esté completamente cargada (puedes ajustar el tiempo según sea necesario)
+sleep(10)
+
+# Intenta realizar una acción para forzar la carga completa de la página (puedes ajustar según sea necesario)
+driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
+sleep(2)
+
+# Busca los títulos después de la carga completa de la página
+subtitulos = driver.find_elements(By.XPATH, '//div[@class="_i5duul"]')
+for subtitulo in subtitulos:
+    print(subtitulo.text)
+
+# Cierra el navegador al finalizar
+driver.quit()
